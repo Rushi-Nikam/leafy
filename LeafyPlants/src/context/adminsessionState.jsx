@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
-import SessionContext from './Session'
+import React, { useState } from 'react';
+import AdminSessionContext from './AdminSessionContext'; 
 
-const adminsessionState = ({children}) => {
-    const [adminsessionId, setAdminSessionId] = useState(-1,{});
-    // const [adminsessionId, adminsetSessionId] = useState(-1,{});
+const AdminSessionState = ({ children }) => {
+    const [adminSessionId, setAdminSessionId] = useState(-1);
 
-  return (
-    <SessionContext.Provider value = {{adminsessionId, setAdminSessionId}}>
-        {children}
-    </SessionContext.Provider>
-  )
-}
+    return (
+        <AdminSessionContext.Provider value={{ adminSessionId, setAdminSessionId }}>
+            {children}
+        </AdminSessionContext.Provider>
+    );
+};
 
-export default adminsessionState;
+export default AdminSessionState;
+
+
+

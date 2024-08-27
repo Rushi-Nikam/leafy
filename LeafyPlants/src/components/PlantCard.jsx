@@ -28,7 +28,6 @@ const PlantCard = ({ item, handleAddToCart }) => {
               <Link to={`/SingleProduct/${val.id}`}>
                 <button className='w-full uppercase px-12 py-3 mb-3 bg-[#149253] text-white'>view product</button>
               </Link>
-              {/* Utilize AddToCartButton */}
             </div>
           ))}
         </div>

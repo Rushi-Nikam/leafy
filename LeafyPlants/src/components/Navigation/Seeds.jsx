@@ -42,8 +42,13 @@ const Seeds = () => {
             />
           </div>
 
-          <div className="w-full">
-            <PlantCard item={items} />
+          <div
+            className="w-full overflow-y-auto "
+            style={{ maxHeight: "calc(100vh - 200px)" }}
+          >
+            {/* {items?.map((item) => ( */}
+            {/* ))} */}
+              <PlantCard item={items} />
           </div>
         </div>
       </div>

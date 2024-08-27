@@ -32,7 +32,7 @@ const Services = () => {
         {data?.map((val, i) => (
             <div key={i} className='text-center space-y-3'>
                 <div className='outline outline-[#e3b4d5] outline-offset-4 rounded-full overflow-hidden w-[128px] h-[128px]'>
-                    <img src = {val.image} alt = {val.title} className='w-full h-full object-cover'/>
+                    <img src = {val?.image} alt = {val?.title} className='w-full h-full object-cover'/>
                 </div>
                 <h1 className='text-xl'>{val.title}</h1>
             </div>

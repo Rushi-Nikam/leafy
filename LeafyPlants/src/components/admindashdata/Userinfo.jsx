@@ -8,7 +8,7 @@ const Userinfo = () => {
     // Fetch customer data when component mounts
     axios.get('http://localhost:8080/login')
       .then(response => {
-        setCustomers(response.data);
+        setCustomers(response?.data);
       })
       .catch(error => {
         console.error('Error fetching customer data:', error);

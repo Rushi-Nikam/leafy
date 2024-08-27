@@ -1,211 +1,217 @@
-const mysql  = require('mysql')
-const express = require('express')
-const cors =require('cors');
-// const jwt = require('jsonwebtoken')
-const session  = require('express-session')
-const cookieParser = require('cookie-parser')
+require('dotenv').config(); // Load environment variables from .env file
+const mysql = require('mysql');
+const express = require('express');
+const cors = require('cors');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 
-const salt = 10;
-const  app = express();
-// const router = express.router();
+const saltRounds = 10;
+const app = express();
+
 app.use(cors());
-app.use(express.json())
-app.use(cookieParser())
+app.use(express.json());
+app.use(cookieParser());
 
+// Session setup
 app.use(session({
-    secret:'secret',
-    resave:false,
-    saveUninitialized:false,
-    cookie:{
-        secure:false,
-        maxAge:1000 * 60 * 60 * 24
-    }   
-}))
+    secret: process.env.SESSION_SECRET || 'default_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false, // Set to true if using HTTPS
+        maxAge: 1000 * 60 * 60 * 24 // 24 hours
+    }
+}));
+
+// Database connection
 const db = mysql.createConnection({
-host :"localhost",
-user:"root",
-password:"Rushikesh@27",
-database:"Signups",
-})
-app.post("/NewUser",(req,res)=>{
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'Signups'
+});
 
-    const sql = "INSERT INTO login(`Fname`,`Lname`,`email`,`password`) values (?)";
-// bcrypt.hash(req.body.password.toString(),salt,(err,hash)=>{
-    // if(err) return res.json({Error:"Error for hassing password"})
-    const values = [
-        req.body.Fname,
-        req.body.Lname,
-        req.body.email,
-        req.body.password
-     ]
-     db.query(sql,[values],(err , result)=>{
-        if(err)  return res.json("error")
-        
-        return res.json(result);
-    })     
-   
-})
-app.post("/login",(req,res)=>{
-    const sql = "SELECT * FROM login WHERE `email`= ? AND `password` = ?";
-    db.query(sql, [req.body.email ,  req.body.password],(err , result)=>{
-        if(err) return res.json({Message:"Error inside server"})
-        if(result.length > 0){
-        req.session.user_id = result[0].id;
-        console.log(req.session.user_id);
-        return res.json({Login:true, user_session_id: req.session.user_id});
+// Check if server is running
+app.get('/', (req, res) => {
+    res.send('Server is running');
+});
+
+// Register new user
+app.post('/NewUser', (req, res) => {
+    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+        if (err) return res.status(500).json({ Error: "Error hashing password" });
+
+        const sql = 'INSERT INTO login(Fname, Lname, email, password) VALUES (?, ?, ?, ?)';
+        const values = [req.body.Fname, req.body.Lname, req.body.email, hash];
+        db.query(sql, values, (err, result) => {
+            if (err) return res.status(500).json({ Error: "Error inserting new user" });
+            return res.status(201).json(result);
+        });
+    });
+});
+
+// Login
+app.post('/login', (req, res) => {
+    const sql = 'SELECT * FROM login WHERE email = ?';
+    db.query(sql, [req.body.email], (err, result) => {
+        if (err) return res.status(500).json({ Message: "Error querying database" });
+
+        if (result.length > 0) {
+            const user = result[0];
+            bcrypt.compare(req.body.password, user.password, (err, match) => {
+                if (err) return res.status(500).json({ Message: "Error comparing passwords" });
+
+                if (match) {
+                    req.session.user_id = user.id;
+                    return res.status(200).json({ Login: true, user_session_id: req.session.user_id });
+                } else {
+                    return res.status(401).json({ Login: false, Message: 'Incorrect password' });
+                }
+            });
+        } else {
+            return res.status(404).json({ Login: false, Message: 'Email does not exist' });
         }
-        else return res.json({Login:false})
-        
-    })
-})
+    });
+});
 
-//get user data
+// Check if email exists
+app.post('/check-email', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await new Promise((resolve, reject) => {
+            db.query('SELECT * FROM login WHERE email = ?', [email], (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
+        });
+
+        if (user.length > 0) {
+            return res.status(200).json({ exists: true });
+        } else {
+            return res.status(200).json({ exists: false });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Fetch user data
 app.get('/userdata', (req, res) => {
-    const sql = "SELECT Fname, Lname, email FROM login WHERE id = ?";
-  
+    const sql = 'SELECT Fname, Lname, email FROM login WHERE id = ?';
     db.query(sql, [req.query.id], (err, result) => {
-        if(err) {
+        if (err) {
             console.error(err.message);
-            res.status(500).json({ error: "Error fetching user data" });
+            res.status(500).json({ error: 'Error fetching user data' });
         } else {
             res.status(200).json({ user: result[0] });
         }
     });
 });
+
+// Fetch admin data
 app.get('/admindata', (req, res) => {
-    const sql = "SELECT adminName, adminEmail FROM admin WHERE id = ?";
-    
+    const sql = 'SELECT adminName, adminEmail FROM admin WHERE id = ?';
     db.query(sql, [req.query.id], (err, result) => {
-      if (err) {
-        console.error(err.message);
-        res.status(500).json({ error: "Error fetching admin data" });
-      } else {
-        if (result.length > 0) {
-          res.status(200).json({ admin: result[0] });
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: 'Error fetching admin data' });
         } else {
-          res.status(404).json({ error: "Admin not found" });
+            if (result.length > 0) {
+                res.status(200).json({ admin: result[0] });
+            } else {
+                res.status(404).json({ error: 'Admin not found' });
+            }
         }
-      }
     });
-  });
-  
-app.post("/Contact",(req,res)=>{
-    const sql = "INSERT INTO contactus(`username`,`email`,`number`,`message`) values (?)";
-     const values = [
-        req.body.username,
-        req.body.email,
-        req.body.number,
-        req.body.message,
-     ]
-    db.query(sql,[values],(err , data)=>{
-        if(err){
-            return res.json("Error")
+});
+
+// Contact form submission
+app.post('/Contact', (req, res) => {
+    const sql = 'INSERT INTO contactus(username, email, number, message) VALUES (?, ?, ?, ?)';
+    const values = [req.body.username, req.body.email, req.body.number, req.body.message];
+    db.query(sql, values, (err, data) => {
+        if (err) {
+            return res.status(500).json('Error');
         }
-        return res.json(data);
-    })
-})
-app.post("/form", (req, res) => {
-    // Extract necessary fields from req.body
+        return res.status(201).json(data);
+    });
+});
+
+// Form submission
+app.post('/form', (req, res) => {
+  const { name, mobile, email, address, location, garden_area, garden_service, price } = req.body;
+  const sql = 'INSERT INTO Forms (name, mobile, email, address, location, garden_area, garden_service, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  const values = [name, mobile, email, address, location, garden_area, garden_service, price];
+  db.query(sql, values, (err, result) => {
+      if (err) {
+          console.error('Error inserting form data:', err);
+          return res.status(500).json({ error: 'Error inserting form data' });
+      }
+      console.log('Form data inserted successfully');
+      return res.status(200).json({ message: 'Form data inserted successfully', result });
+  });
+});
+
+
+// Another form submission
+app.post('/forms', (req, res) => {
     const { name, mobile, email, address, location, garden_area, garden_service, price } = req.body;
-
-    // Include all fields in the INSERT query
-    const sql = "INSERT INTO Form (name, mobile, email, address, location, garden_area, garden_service, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    const sql = 'INSERT INTO Forms (name, mobile, email, address, location, garden_area, garden_service, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [name, mobile, email, address, location, garden_area, garden_service, price];
-
-    // Execute the SQL query
     db.query(sql, values, (err, result) => {
         if (err) {
-            console.error("Error inserting form data:", err);
-            return res.status(500).json({ error: "Error inserting form data" });
+            console.error('Error inserting form data:', err);
+            return res.status(500).json({ error: 'Error inserting form data' });
         }
-        console.log("Form data inserted successfully");
-        return res.status(200).json({ message: "Form data inserted successfully", result });
+        console.log('Form data inserted successfully');
+        return res.status(200).json({ message: 'Form data inserted successfully', result });
     });
 });
 
-app.post("/forms", (req, res) => {
-    // Extract necessary fields from req.body
-    const { name, mobile, email, address, location, garden_area, garden_service, price } = req.body;
+// Register new admin
+app.post('/newadmin', (req, res) => {
+    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+        if (err) return res.status(500).json({ Error: "Error hashing password" });
 
-    // Include all fields in the INSERT query
-    const sql = "INSERT INTO Forms (name, mobile, email, address, location, garden_area, garden_service, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = [name, mobile, email, address, location, garden_area, garden_service, price];
-
-    // Execute the SQL query
-    db.query(sql, values, (err, result) => {
-        if (err) {
-            console.error("Error inserting form data:", err);
-            return res.status(500).json({ error: "Error inserting form data" });
-        }
-        console.log("Form data inserted successfully");
-        return res.status(200).json({ message: "Form data inserted successfully", result });
+        const sql = 'INSERT INTO admin(adminName, adminEmail, password) VALUES (?, ?, ?)';
+        const values = [req.body.adminName, req.body.adminEmail, hash];
+        db.query(sql, values, (err, result) => {
+            if (err) return res.status(500).json('Error');
+            return res.status(201).json(result);
+        });
     });
 });
 
-app.post("/newadmin",(req,res)=>{
+// Admin login
+app.post('/admin', (req, res) => {
+    const sql = 'SELECT * FROM admin WHERE adminEmail = ?';
+    db.query(sql, [req.body.adminEmail], (err, result) => {
+        console.log(req.body?.adminEmail);
+        if (err) return res.status(500).json({ Message: 'Error querying database' });
 
-    const sql = "INSERT INTO admin(`adminName`,`adminEmail`,`password`) values (?)";
-// bcrypt.hash(req.body.password.toString(),salt,(err,hash)=>{
-    // if(err) return res.json({Error:"Error for hassing password"})
-    const values = [
-        req.body.adminName,
-        req.body.adminEmail,
-        req.body.password
-     ]
-     db.query(sql,[values],(err , result)=>{
-        if(err)  return res.json("error")
-        
-        return res.json(result);
-    })
-})
-app.get('/login', (req, res) => {
-    const sql = 'SELECT * FROM login'; // Assuming your table name is 'customers'
-    db.query(sql, (err, result) => {
-      if (err) {
-        console.error('Error fetching customer details:', err);
-        res.status(500).json({ error: 'Error fetching customer details' });
-      } else {
-        res.status(200).json(result);
-      }
-    });
-  });
-  app.post("/admin", (req, res) => {
-    const sql = "SELECT * FROM admin WHERE `adminEmail`= ? AND `password` = ?";
-    db.query(sql, [req.body.adminEmail, req.body.password], (err, result) => {
-        if (err) return res.json({ Message: "Error inside server" });
         if (result.length > 0) {
-            req.session.admin_id = result[0].id; // Corrected from user_id to admin_id
-            console.log(req.session.admin_id);
-            return res.json({ Login: true, admin_session_id: req.session.admin_id }); // Corrected from user_id to admin_id
-        } else return res.json({ Login: false });
-    });
-});
+            const admin = result[0];
+            bcrypt.compare(req.body.password, admin.password, (err, match) => {
+                if (err) return res.status(500).json({ Message: 'Error comparing passwords' });
 
-
-  app.get('/userdata', (req, res) => {
-    const userId = req.query.id; // Assuming you're passing the user ID in the query parameters
-  
-    // Query to fetch user data from the database
-    const sql = 'SELECT Fname, Lname, email FROM users WHERE id = ?';
-  
-    // Execute the query with the user ID parameter
-    db.query(sql, [userId], (err, result) => {
-      if (err) {
-        console.error('Error fetching user data:', err);
-        res.status(500).json({ error: 'Error fetching user data' });
-      } else {
-        // Check if user data exists
-        if (result.length > 0) {
-          // If user data exists, send it as a JSON response
-          res.status(200).json({ user: result[0] });
+                if (match) {
+                    req.session.admin_id = admin.id;
+                    console.log(req.session?.admin_id);
+                    return res.status(200).json({ Login: true, admin_session_id: req.session.admin_id });
+                } else {
+                    return res.status(401).json({ Login: false });
+                }
+            });
         } else {
-          // If user data does not exist, send a 404 response
-          res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({ Login: false });
         }
-      }
     });
-  });
-  
-app.listen(8080,()=>{
-    console.log("listen on 8080");
-})
+});
+
+// Start the server
+app.listen(8080, () => {
+    console.log('Server is running on port 8080');
+});

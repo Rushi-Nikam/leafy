@@ -29,14 +29,14 @@ const Profile = () => {
       {userData ? (
         <div>
           <h2>User Profile</h2>
-          <p>Name: {userData.Fname} {userData.Lname}</p>
-          <p>Email: {userData.email}</p>
+          <p>Name: {userData?.Fname} {userData?.Lname}</p>
+          <p>Email: {userData?.email}</p>
           {/* Display other user information as needed */}
         </div>
       ) : (
           <div>Loading...</div>
         )}
-        <Link to="/" className='uppercase text-xl my-10 gap-y-10 underline flex items-center justify-center' onClick={() => session?.setSessionId(-1)}>Log out</Link>
+        <Link to="/" className='uppercase text-xl my-10 gap-y-10 underline flex items-center justify-center' onClick={() => session?.setSessionId()}>Log out</Link>
     </div>
     
   );

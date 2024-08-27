@@ -1,22 +1,18 @@
 import React, { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import FormValidation from "./Validations/FormValidation";
-import axios from "axios";
 
 const Forms = () => {
-  
   const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
     mobile: "",
     email: "",
-    address:"",
-    location:'',
+    address: "",
+    location: "",
     garden_service: "",
-    garden_area:"",
-    price:""
+    garden_area: "",
+    price: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -24,49 +20,54 @@ const Forms = () => {
   const handleInput = (event) => {
     setValues((prev) => ({
       ...prev,
-      [event.target.name]: [event.target.value],
+      [event.target.name]: event.target.value, // Removed extra array brackets around event.target.value
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setErrors(FormValidation(values));
-    console.log(values)
-    
-    // if ( errors.name === "" && errors.Mobile === "" && errors.email === "" && errors.Gardenservice === ""  ) {
-      axios
-        .post("http://localhost:8080/form", values)
-        .then((res) => {
-          console.log(res)
-          navigate("/show");
-         
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+
+    try {
+      const response = await fetch("http://localhost:8080/form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        navigate("/show");
+      } else {
+        console.error("Form submission failed.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
     }
-  // };
-  
+  };
+
   return (
     <>
       <div className="bg-[#f0ebf8] grid justify-center w-full items-center">
         <form
           id="save_service"
-          action=""
-          className="border-2 my-8 rounded-md bg-white "
+          className="border-2 my-8 rounded-md bg-white"
           onSubmit={handleSubmit}
         >
           <h1 className="text-2xl items-center mx-12 mt-12 uppercase font-medium">
             Leafy GARDEN SERVICE
           </h1>
-          <div className=" flex  flex-col my-10 border-2 rounded-xl   mx-10 ">
+          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
             <label className="mx-10 mt-4 font-bold" htmlFor="name">
               Name:
             </label>
             <br />
             <input
               type="text"
-              className=" w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg "
+              className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
               name="name"
               placeholder="Your answer"
               autoComplete="off"
@@ -76,25 +77,26 @@ const Forms = () => {
           {errors.name && (
             <span className="text-red-500 text-sm">{errors.name}</span>
           )}
-          <div className="flex  flex-col my-10 border-2 rounded-xl   mx-10 ">
+
+          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
             <label className="mx-10 mt-4 font-bold" htmlFor="mobile">
               Mobile:
             </label>
             <br />
             <input
               type="text"
-              className=" w-96 h-12 rounded-lg border-none mx-10  outline-none text-lg"
+              className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
               name="mobile"
               placeholder="Your Mobile"
               autoComplete="off"
               onChange={handleInput}
-              />
+            />
             {errors.mobile && (
               <span className="text-red-500 text-sm">{errors.mobile}</span>
             )}
           </div>
 
-          <div className="flex  flex-col my-10 border-2 rounded-xl   mx-10 ">
+          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
             <label className="mx-10 mt-4 font-bold" htmlFor="email">
               Email:
             </label>
@@ -102,36 +104,35 @@ const Forms = () => {
             {errors.email && (
               <span className="text-red-500 text-sm">{errors.email}</span>
             )}
-
             <input
-              className=" w-96 h-12 rounded-lg border-none mx-10  outline-none text-lg "
+              className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
               type="email"
               name="email"
               placeholder="Your email"
               autoComplete="off"
               onChange={handleInput}
-              />
+            />
           </div>
-          <div className="flex  flex-col my-10 border-2 rounded-xl   mx-10 ">
+
+          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
             <label className="mx-10 mt-4 font-bold" htmlFor="address">
               Address:
             </label>
             <br />
-         
-
             <input
-              className=" w-96 h-12 rounded-lg border-none mx-10  outline-none text-lg "
+              className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
               type="text"
               name="address"
               autoComplete="off"
               onChange={handleInput}
               placeholder="Your Address"
-              />
-              {errors.address && (
-                <span className="text-red-500 text-sm">{errors.address}</span>
-              )}
+            />
+            {errors.address && (
+              <span className="text-red-500 text-sm">{errors.address}</span>
+            )}
           </div>
-               <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
+
+          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
             <label className="mx-10 mt-4 font-bold" htmlFor="location">
               Location:
             </label>
@@ -146,82 +147,76 @@ const Forms = () => {
               <option value="Mumbai">Mumbai</option>
               <option value="Thane">Thane</option>
             </select>
-           
           </div>
-          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
-  <label className="mx-10 mt-4 font-bold" htmlFor="garden_area">
-    Garden Area and  price:
-  </label>
-  <select
-    className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
-    name="garden_area"
-    onChange={handleInput}
-  >
-    <option value="Garden Area">Select Garden Area  </option>
-    <option value="200">200 square feet</option>
-    <option value="500"> 500 square feet</option>
-    <option value="1000">1000 square feet</option>
-    <option value="1500">1500 square feet</option>
-    <option value="2000">2000 square feet</option>
-    <option value="3000"> Greater than 2000 square feet</option>
-  </select>
-  {errors.garden_area && (
-    <span className="text-red-500 text-sm">{errors.garden_area}</span>
-  )}
-</div>
-          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
-  <label className="mx-10 mt-4 font-bold" htmlFor="garden_area">
-    Garden Area and  price:
-  </label>
-  <select
-    className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
-    name="garden_area"
-    onChange={handleInput}
-  >
-    <option value="Price">Select  price  as per garden area </option>
-    <option value="200">₹3000 - 200 square feet</option>
-    <option value="500">₹5000 - 500 square feet</option>
-    <option value="1000">₹9000 - 1000 square feet</option>
-    <option value="1500">₹14000 - 1500 square feet</option>
-    <option value="2000">₹21000 - 2000 square feet</option>
-    <option value="30000">₹30000 - Greater than 2000 square feet</option>
-  </select>
-  {errors.price && (
-    <span className="text-red-500 text-sm">{errors.price}</span>
-  )}
-</div>
 
-          <div className="flex  flex-col my-10 border-2 rounded-xl gap-4   mx-10 ">
-            <label
-              htmlFor="garden_service"
-              className="uppercase font-bold mx-10"
+          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
+            <label className="mx-10 mt-4 font-bold" htmlFor="garden_area">
+              Garden Area:
+            </label>
+            <select
+              className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
+              name="garden_area"
+              onChange={handleInput}
             >
+              <option value="Garden Area">Select Garden Area</option>
+              <option value="200">200 square feet</option>
+              <option value="500">500 square feet</option>
+              <option value="1000">1000 square feet</option>
+              <option value="1500">1500 square feet</option>
+              <option value="2000">2000 square feet</option>
+              <option value="3000">Greater than 2000 square feet</option>
+            </select>
+            {errors.garden_area && (
+              <span className="text-red-500 text-sm">{errors.garden_area}</span>
+            )}
+          </div>
+
+          <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
+            <label className="mx-10 mt-4 font-bold" htmlFor="price">
+              Price:
+            </label>
+            <select
+              className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
+              name="price"
+              onChange={handleInput}
+            >
+              <option value="">Select price as per garden area</option>
+              <option value="3000">₹3000 - 200 square feet</option>
+              <option value="5000">₹5000 - 500 square feet</option>
+              <option value="9000">₹9000 - 1000 square feet</option>
+              <option value="14000">₹14000 - 1500 square feet</option>
+              <option value="21000">₹21000 - 2000 square feet</option>
+              <option value="30000">₹30000 - Greater than 2000 square feet</option>
+            </select>
+            {errors.price && (
+              <span className="text-red-500 text-sm">{errors.price}</span>
+            )}
+          </div>
+
+          <div className="flex flex-col my-10 border-2 rounded-xl mx-10 gap-4">
+            <label htmlFor="garden_service" className="uppercase font-bold mx-10">
               Services Available
             </label>
             <div className="mx-10">
-              <div> Single Day Maintenance Services</div>
-              {/* <div> monthly Maintenance Services</div> */}
-              <div> Flower Garden Setup</div>
+              <div>Single Day Maintenance Services</div>
+              <div>Flower Garden Setup</div>
             </div>
             <input
               type="text"
-              className=" w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg "
+              className="w-96 h-12 rounded-lg border-none mx-10 outline-none text-lg"
               name="garden_service"
               placeholder="Your answer"
               autoComplete="off"
               onChange={handleInput}
             />
-
             {errors.garden_service && (
-              <span className="text-red-500 text-sm">
-                {errors.garden_service}
-              </span>
+              <span className="text-red-500 text-sm">{errors.garden_service}</span>
             )}
           </div>
 
           <input
             type="submit"
-            value="submit"
+            value="Submit"
             name="submit"
             className="uppercase bg-[#673ab7] text-white px-4 py-2 my-2 mx-10 cursor-pointer"
           />

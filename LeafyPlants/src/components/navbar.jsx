@@ -1,12 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext ,useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaUserLarge } from "react-icons/fa6";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
 import SessionContext from "../context/Session";
+import ShoppingCart from "./ProductScreen/ShoppingCart";
 
 const Navbar = ({ isLoggedIn }) => {
   const session = useContext(SessionContext);
+  const [cartsvisibility,setCartsvisibility]=useState(false);
+const [productInCart,setProductInCart]=useState([]);
 
   const links = [
     {
@@ -68,6 +71,7 @@ const Navbar = ({ isLoggedIn }) => {
             type="search"
             placeholder="Search for plants, seeds and planters..."
           />
+          
           <CiSearch size={20} className="cursor-pointer" />
         </div>
         {session?.sessionId >= 0 ? (
@@ -79,9 +83,9 @@ const Navbar = ({ isLoggedIn }) => {
             <FaUserLarge size={20} />
           </NavLink>
         )}
-        <NavLink to="/addtocartpage" className="relative">
-          <HiOutlineShoppingCart size={23} />
-          <span className="w-6 h-6 text-xs absolute bg-green-500 text-white rounded-full flex items-center justify-center -top-4 left-3">10</span>
+        <NavLink to='/Shoppingcart' className="relative">
+          <HiOutlineShoppingCart onClick={()=>{setCartsvisibility(true)}} size={23} />
+        
         </NavLink>
       </div>
     </div>

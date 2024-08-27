@@ -1,15 +1,15 @@
 function adminValidation(values){
     alert("")
     let errors={}
-    const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
     const password_pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
-if (values.AdminEmail === undefined || values.AdminEmail === "") {
-    errors.AdminEmail = "Email should not be empty";
-} else if (!email_pattern.test(values.email)) {
-    errors.AdminEmail = "Email format is incorrect";
+if (values.adminEmail === undefined || values.adminEmail === "") {
+    errors.adminEmail = "Email should not be empty";
+} else if (!email_pattern.test(values.adminEmail)) {
+    errors.adminEmail = "Email format is incorrect";
 } else {
-    errors.AdminEmail = "";
+    errors.adminEmail = "";
 }
 
 if (values.password === undefined || values.password === "") {
