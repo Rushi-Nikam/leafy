@@ -25,7 +25,7 @@ const Plants = () => {
       <div>
         <img
           src="https://www.ugaoo.com/cdn/shop/collections/Indoor-Plants-Category-Banner_1.png?v=1689318958&width=1500"
-          alt="Indoor Plants"
+          alt=" Plants"
         />
       </div>
       <div className="px-12 py-5">

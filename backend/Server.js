@@ -13,13 +13,12 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-// Session setup
 app.use(session({
     secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: false, // Set to true if using HTTPS
+        secure: false, 
         maxAge: 1000 * 60 * 60 * 24 // 24 hours
     }
 }));
@@ -120,9 +119,9 @@ app.get('/admindata', (req, res) => {
             res.status(500).json({ error: 'Error fetching admin data' });
         } else {
             if (result.length > 0) {
-                res.status(200).json({ admin: result[0] });
+               return res.status(200).json({ admin: result[0] });
             } else {
-                res.status(404).json({ error: 'Admin not found' });
+                return res.status(404).json({ error: 'Admin not found' });
             }
         }
     });
@@ -142,18 +141,23 @@ app.post('/Contact', (req, res) => {
 
 // Form submission
 app.post('/form', (req, res) => {
-  const { name, mobile, email, address, location, garden_area, garden_service, price } = req.body;
-  const sql = 'INSERT INTO Forms (name, mobile, email, address, location, garden_area, garden_service, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-  const values = [name, mobile, email, address, location, garden_area, garden_service, price];
-  db.query(sql, values, (err, result) => {
+    const { name, mobile, email, address, location, garden_service, garden_area, price } = req.body;
+  
+    if (!name || !mobile || !email || !address || !location || !garden_service || !garden_area || !price) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+  
+    const sql = 'INSERT INTO form SET ?';
+    const values = { name, mobile, email, address, location, garden_service, garden_area, price };
+  
+    db.query(sql, values, (err, result) => {
       if (err) {
-          console.error('Error inserting form data:', err);
-          return res.status(500).json({ error: 'Error inserting form data' });
+        console.error(err);
+        return res.status(500).json({ message: 'Server error' });
       }
-      console.log('Form data inserted successfully');
-      return res.status(200).json({ message: 'Form data inserted successfully', result });
-  });
-});
+      res.status(200).json({ message: 'Data saved successfully' });
+    });
+  });   
 
 
 // Another form submission

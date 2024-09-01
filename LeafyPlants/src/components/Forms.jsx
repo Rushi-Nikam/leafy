@@ -18,35 +18,38 @@ const Forms = () => {
   const [errors, setErrors] = useState({});
 
   const handleInput = (event) => {
+    const { name, value } = event.target;
     setValues((prev) => ({
       ...prev,
-      [event.target.name]: event.target.value, // Removed extra array brackets around event.target.value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     setErrors(FormValidation(values));
+console.log(values)
+fetch("http://localhost:8080/form", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(values),
+})
+.then((response) => {
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  navigate("/show");
+})
+.catch((error) => {
+  console.error("There was a problem with the fetch operation:", error);
+});
 
-    try {
-      const response = await fetch("http://localhost:8080/form", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log(result);
-        navigate("/show");
-      } else {
-        console.error("Form submission failed.");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
   };
 
   return (
@@ -73,10 +76,10 @@ const Forms = () => {
               autoComplete="off"
               onChange={handleInput}
             />
-          </div>
           {errors.name && (
             <span className="text-red-500 text-sm">{errors.name}</span>
           )}
+          </div>
 
           <div className="flex flex-col my-10 border-2 rounded-xl mx-10">
             <label className="mx-10 mt-4 font-bold" htmlFor="mobile">

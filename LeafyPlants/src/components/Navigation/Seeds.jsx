@@ -15,13 +15,13 @@ const Seeds = () => {
   return (
     <>
       <div>
-        <span className="py-14 px-12 text-lg text-green-700">
+        {/* <span className="py-14 px-12 text-lg text-green-700">
           <Link className="mx-2" to={"/"}>
             Home
           </Link>
           /Seeds
-        </span>
-        <img src="https://www.ugaoo.com/cdn/shop/collections/Seeds_Banner.jpg?v=1689938338&width=1500://www.uons/Indoor-Plants-Category-Banner_1.png?v=1689318958&width=1500gaoo.com/cdn/shop/collecti" />
+        </span> */}
+        <img src="https://www.ugaoo.com/cdn/shop/collections/Sub_Category_Banners__Trees___Grass_Desk.jpg?v=1689935474&width=1500" />
       </div>
       <div className="px-12 py-5 ">
         <h1 className="text-4xl font-semibold mb-8">Seeds</h1>

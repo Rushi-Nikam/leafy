@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import AddToCartButton from './AddToCartButton';
 import { FaRegStar } from "react-icons/fa";
-import CartContext from '../../context/cart_context';
+import { useCartStore } from '../../store/CartStore';
 import data from '../Data/data';
 import data2 from '../Data/data2';
 
@@ -12,7 +12,7 @@ const SingleProduct = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { addProductToCart } = useContext(CartContext);
+  const addProductToCart = useCartStore(state => state.addProductToCart);
 
   const fetchProduct = useCallback(() => {
     setLoading(true);
@@ -54,12 +54,12 @@ const SingleProduct = () => {
               <img className='h-5/6' src={product.image} alt={product.title} />
             </div>
             <div className='mx-12 my-10'>
-              <h2 className='font-bold text-4xl'>{product.title}</h2>
-              <div className='text-2xl'>Description: {product.description}</div>
+              <h2 className='font-bold text-green-500 text-4xl'>{product.title}</h2>
+              <div className='text-2xl'><span className='text-green-500'>Description:</span> {product.description}</div>
               <div className='text-2xl flex gap-2'>
-                Rating: <p className='text-yellow-500 text-3xl'><FaRegStar /></p>{product.rating}
+              <span className='text-green-500'> Rating:</span>  <p className='text-yellow-500 text-3xl'><FaRegStar /></p>{product.rating}
               </div>
-              <p className='text-2xl text-green-500'>Price: ₹{product.price}</p>
+              <p className='text-2xl'> <span className='text-green-500'> Price:</span>  ₹{product.price}</p>
               <AddToCartButton item={product} handleAddToCart={() => addProductToCart(product)} />
             </div>
           </div>

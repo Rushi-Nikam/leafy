@@ -2,29 +2,31 @@ import React, { useContext, useEffect, useState } from 'react';
 import { FaRegUser } from "react-icons/fa";
 import { FiBox } from "react-icons/fi";
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import AdminSessionContext from '../context/AdminSessionContext';
 import Avatar from 'react-avatar';
 
 const Admindashboard = () => {
-  const { AdminSessionId, setAdminSessionId } = useContext(AdminSessionContext); // Destructure from context
+  const { adminSessionId, setAdminSessionId } = useContext(AdminSessionContext); // Destructure from context
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!AdminSessionId) {
+    if (!adminSessionId) {
+      console.log("Admin is not login")
       navigate('/'); // Redirect if not logged in
       return; // Ensure the function exits here
     }
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('/admindata', {
-          params: { id: AdminSessionId } // Use AdminSessionId for the request
-        });
-        console.log('Response:', response.data); // Log the response
-        setUserData(response.data.user);
+        const response = await fetcdh('http://localhost/admindata?id=' + adminSessionId);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('Response:', data); // Log the response
+        setUserData(data.user);
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -33,7 +35,7 @@ const Admindashboard = () => {
     };
 
     fetchUserData();
-  }, [AdminSessionId, navigate]);
+  }, [adminSessionId, navigate]);
 
   if (loading) {
     return <div>Loading...</div>; // Show a loading message or spinner while data is being fetched

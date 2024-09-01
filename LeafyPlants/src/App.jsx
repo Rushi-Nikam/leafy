@@ -1,5 +1,5 @@
     import React, { useState, useEffect, useContext } from "react";
-    import { BrowserRouter, Route, Routes } from "react-router-dom";
+    import { BrowserRouter, Route, Routes} from "react-router-dom";
     import "./App.css";
     import Header from "./components/header";
     import Navbar from "./components/navbar";
@@ -14,13 +14,12 @@
     import Account from "./components/Navigation/Account";
     import NewUser from "./components/Navigation/NewUser";
     import Userpage from "./components/Navigation/Userpage";
-    import Filter from "./components/Navigation/Filter";
+   
     import Show from "./components/Navigation/Show";
     import Working from "./components/Working";
     import Forms from "./components/Forms";
     import Formes from "./components/Formes";
     import SingleProduct from "./components/ProductScreen/SingleProduct";
-    // import AddToCartPage from "./components/ProductScreen/AddToCartPage";
     import ShoppingCart from "./components/ProductScreen/ShoppingCart";
     import Admin from "./components/Admin";
     import Mumbai from "./components/VendorLocation/Mumbai";
@@ -38,19 +37,19 @@
     import Profile from "./components/User/Profile";
     import data1 from "./components/Data/data"; // Import data1
     import data2 from "./components/Data/data2"; // Import data2
-    import { CartProvider } from './context/cart_context'
+    import { useCartStore } from "./store/CartStore";
     function App() {
       const [hideNavbar, setHideNavbar] = useState(false);
       const [hideHeader, setHideHeader] = useState(false);
       const [hideFooter, setHideFooter] = useState(false);
-      const [cart, setCart] = useState([]);
       const [isLoggedIn, setIsLoggedIn] = useState(false);
-      const [adminisLoggedIn, setadminIsLoggedIn] = useState(false);
+      const [adminisLoggedIn, setAdminIsLoggedIn] = useState(false);
       const session = useContext(SessionContext);
-      const AdminSession = useContext(AdminSessionContext)
-
+      const AdminSession = useContext(AdminSessionContext);
+    
+      const { cart, addToCart, removeFromCart, updateQuantity } = useCartStore();
       useEffect(() => {
-        if (window.location.pathname === "/Show") {
+        if (window.location.pathname === "/show") {
           setHideNavbar(true);
           setHideHeader(true);
           setHideFooter(true);
@@ -59,31 +58,21 @@
           setHideHeader(false);
           setHideFooter(false);
         }
-      }, [window.location.pathname]);
+      }, ["/show"]);
 
       const handleAddToCart = (item) => {
-        const existingItem = cart.find(cartItem => cartItem.id === item.id);
+      addToCart(item);
       
-        if (existingItem) {
-          const updatedCart = cart.map(cartItem =>
-            cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
-          );
-          setCart(updatedCart);
-        } else {
-          setCart([...cart, { ...item, quantity: 1 }]);
-        }
+       
       };
       
 
       const handleProductRemove = (productId) => {
-        setCart(cart.filter(product => product.id !== productId));
+        removeFromCart(productId);
       };
 
       const handleQuantityChange = (productId, newQuantity) => {
-        const updatedCart = cart.map(item =>
-          item.id === productId ? { ...item, quantity: newQuantity } : item
-        );
-        setCart(updatedCart);
+        updateQuantity(productId, newQuantity);
       };
 
       const handleLogin = () => {
@@ -96,9 +85,9 @@
       };
       const AdminhandleLogin = () => {
         if (AdminSession.AdminSessionId !== 0) {
-          console.log("Session Created: ", session.AdminSessionId);
+          console.log("Session Created: ", AdminSession.AdminSessionId);
         }
-        setadminIsLoggedIn(true);
+        setAdminIsLoggedIn(true);
         // Redirect to Userpage
         window.location.href = "/admindashboard";
       };
@@ -106,7 +95,7 @@
       return (
         <SessionState>
           <AdminSessionState>
-          <CartProvider>
+         
 
           <BrowserRouter>
             {!hideHeader && <Header />}
@@ -123,12 +112,8 @@
     ) : (
       <Route path="/Account" element={<Account handleLogin={handleLogin} />} />
     )}
-              {adminisLoggedIn ? (
       <Route path="/admindashboard" element={<Admindashboard />} />
-    ) : (
-      <Route path="/Admin" element={<Admin handleLogin={AdminhandleLogin} />} />
-    )}
-              <Route path="/Filter" element={<Filter />} />
+  
               <Route path="/Show" element={<Show />} />
               <Route path="/NewUser" element={<NewUser />} />
               <Route path="*" element={<Error />} />
@@ -153,7 +138,7 @@
             </Routes>
             {!hideFooter && <Footer />}
           </BrowserRouter>
-          </CartProvider>
+         
 
           </AdminSessionState>
         </SessionState>
