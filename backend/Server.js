@@ -12,6 +12,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+// app.use(cors({
+//     origin: 'http://localhost:3000', // Adjust to match your frontend URL
+//     methods: 'GET,POST,PUT,DELETE',
+//     credentials: true
+// }));
+
 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'default_secret',
@@ -214,6 +220,29 @@ app.post('/admin', (req, res) => {
         }
     });
 });
+// Fetch plant data
+app.get('/plants', (req, res) => {
+    const sql = 'SELECT * FROM plants'; // Adjust SQL query as needed
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error fetching plant data:', err);
+            return res.status(500).json({ error: 'Error fetching plant data' });
+        }
+        return res.status(200).json(result);
+    });
+});
+
+app.get('/GardeningTools',(req,res)=>{
+    const sql = "SELECT * FROM GardeningTools";
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.error("Error fetching Tools data:",err);
+            return res.status(500).json({error:"Error fetching tools data"});
+        }
+        return res.status(200).json(result);
+       
+    })
+})
 
 // Start the server
 app.listen(8080, () => {

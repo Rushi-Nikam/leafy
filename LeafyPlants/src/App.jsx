@@ -83,14 +83,14 @@
         
         window.location.href = "/Userpage";
       };
-      const AdminhandleLogin = () => {
-        if (AdminSession.AdminSessionId !== 0) {
-          console.log("Session Created: ", AdminSession.AdminSessionId);
-        }
-        setAdminIsLoggedIn(true);
-        // Redirect to Userpage
-        window.location.href = "/admindashboard";
-      };
+      // const AdminhandleLogin = () => {
+      //   if (AdminSession.AdminSessionId !== 0) {
+      //     console.log("Session Created: ", AdminSession.AdminSessionId);
+      //   }
+      //   setAdminIsLoggedIn(true);
+      //   // Redirect to Userpage
+      //   window.location.href = "/admindashboard";
+      // };
 
       return (
         <SessionState>
@@ -112,7 +112,7 @@
     ) : (
       <Route path="/Account" element={<Account handleLogin={handleLogin} />} />
     )}
-      <Route path="/admindashboard" element={<Admindashboard />} />
+      <Route path="/admindashboard" element={<Admindashboard  />} />
   
               <Route path="/Show" element={<Show />} />
               <Route path="/NewUser" element={<NewUser />} />
@@ -125,8 +125,8 @@
               <Route path="/userinfo" element={<Userinfo />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/Userpage" element={<Userpage />} />
-
-              <Route path="/SingleProduct/:id" element={<SingleProduct data={[...data1, ...data2]} handleAddToCart={handleAddToCart} />} />
+              <Route path="/SingleProduct/:id" element={<SingleProduct />} />
+              {/* <Route path="/SingleProduct/:category/:id" element={<SingleProduct data={[...data1, ...data2]} handleAddToCart={handleAddToCart} />} /> */}
               <Route path="/shoppingcart" element={<ShoppingCart products={cart} onProductRemove={handleProductRemove} onQuantityChange={handleQuantityChange} />} />
              
               <Route path="/About" element={<About />} />

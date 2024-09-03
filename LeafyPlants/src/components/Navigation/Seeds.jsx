@@ -12,6 +12,7 @@ const Seeds = () => {
     const newItems = data.filter((newval) => newval.category === cat);
     setItems(newItems);
   };
+
   return (
     <>
       <div>
@@ -21,10 +22,14 @@ const Seeds = () => {
           </Link>
           /Seeds
         </span> */}
-        <img src="https://www.ugaoo.com/cdn/shop/collections/Sub_Category_Banners__Trees___Grass_Desk.jpg?v=1689935474&width=1500" />
+        <img
+          src="https://www.ugaoo.com/cdn/shop/collections/Sub_Category_Banners__Trees___Grass_Desk.jpg?v=1689935474&width=1500"
+          alt="Seeds Banner"
+          className="w-full h-auto"
+        />
       </div>
-      <div className="px-12 py-5 ">
-        <h1 className="text-4xl font-semibold mb-8">Seeds</h1>
+      <div className="px-4 md:px-12 py-5">
+        <h1 className="text-3xl md:text-4xl font-semibold mb-8">Seeds</h1>
         <p className="text-gray-600 text-lg">
           With high-yielding varieties of vegetable and fruit seeds, flower
           seeds with high germination rates, and exotic flower bulbs, Ugaoo
@@ -33,8 +38,8 @@ const Seeds = () => {
           seeds.
         </p>
 
-        <div className="flex gap-16 my-8">
-          <div id="filter" className="w-80">
+        <div className="flex flex-col md:flex-row gap-8 my-8">
+          <div id="filter" className="w-full md:w-80">
             <Buttons
               menuItems={menuItems}
               filterItems={filterItems}
@@ -43,12 +48,10 @@ const Seeds = () => {
           </div>
 
           <div
-            className="w-full overflow-y-auto "
+            className="w-full overflow-y-auto"
             style={{ maxHeight: "calc(100vh - 200px)" }}
           >
-            {/* {items?.map((item) => ( */}
-            {/* ))} */}
-              <PlantCard item={items} />
+            <PlantCard item={items} />
           </div>
         </div>
       </div>

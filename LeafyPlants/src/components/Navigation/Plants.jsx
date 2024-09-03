@@ -1,58 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PlantCard from "../PlantCard";
 import Buttons from "../Buttons";
-import data from "../Data/data";
-// import axios from "axios";
 
 const Plants = () => {
-  const [items, setItems] = useState(data);
-  const menuItems = [...new Set(data.map((val) => val.category))];
+  const [items, setItems] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
+  const [originalItems, setOriginalItems] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/plants')
+      .then((response) => response.json())
+      .then((jsonData) => {
+        setItems(jsonData);
+        setOriginalItems(jsonData); // Store the original data for resetting filters
+        setMenuItems([...new Set(jsonData.map((val) => val.category))]);
+      })
+      .catch((error) => console.error('Error fetching plant data:', error));
+  }, []);
 
   const filterItems = (cat) => {
-    const newItems = data.filter((newval) => newval.category === cat);
+    const newItems = originalItems.filter((newval) => newval.category === cat);
     setItems(newItems);
   };
 
-  // useEffect(() => {
-  //   axios.get('/getplants', (result) => {
-  //     setItems(result.data);
-  //   })
-
-  // }, [])
-
   return (
     <>
-      <div>
+      <div className="w-full overflow-hidden">
         <img
           src="https://www.ugaoo.com/cdn/shop/collections/Indoor-Plants-Category-Banner_1.png?v=1689318958&width=1500"
-          alt=" Plants"
+          alt="Plants"
+          className="w-full h-auto object-cover"
         />
       </div>
-      <div className="px-12 py-5">
-        <h1 className="text-4xl font-semibold mb-8">Plants</h1>
-        <p className="text-gray-600 text-lg">
+      <div className="px-4 py-5 md:px-12 md:py-8">
+        <h1 className="text-2xl md:text-4xl font-semibold mb-6 md:mb-8">Plants</h1>
+        <p className="text-gray-600 text-base md:text-lg mb-6">
           Plants make for the best house companions, suitable for all your moods
           and every aesthetic. Ugaoo brings you the widest variety of plants to
           choose from so you can buy plants online from the comfort of your
           home!
         </p>
 
-        <div className="flex gap-16 my-8">
-          <div id="filter" className="w-80">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16">
+          <div id="filter" className="w-full md:w-80">
             <Buttons
               menuItems={menuItems}
               filterItems={filterItems}
               setItems={setItems}
+              originalItems={originalItems} // Pass originalItems to Buttons
             />
           </div>
 
           <div
-            className="w-full overflow-y-auto "
+            className="w-full overflow-y-auto"
             style={{ maxHeight: "calc(100vh - 200px)" }}
           >
-            {/* {items?.map((item) => ( */}
-            {/* ))} */}
-              <PlantCard item={items} />
+            <PlantCard item={items} />
           </div>
         </div>
       </div>

@@ -43,24 +43,32 @@ const SingleProduct = () => {
   }
 
   return (
-    <div>
+    <div className='p-4 md:p-6 lg:p-8'>
       {product ? (
         <div>
-          <div className='flex gap-1 text-xl my-2 mx-24 text-green-500'>
+          <div className='flex gap-2 text-lg md:text-xl my-4 mx-auto max-w-5xl text-green-500'>
             <Link to={`/`}><span>Home</span> / </Link> <span>{product.title}</span>
           </div>
-          <div className='grid grid-cols-2 gap-4 my-10 w-full font-serif'>
-            <div className='w-full h-lvh mx-24'>
-              <img className='h-5/6' src={product.image} alt={product.title} />
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 my-10 mx-auto max-w-5xl'>
+            <div className='flex justify-center items-center'>
+              <img className='w-full max-w-md h-auto object-cover' src={product.image} alt={product.title} />
             </div>
-            <div className='mx-12 my-10'>
-              <h2 className='font-bold text-green-500 text-4xl'>{product.title}</h2>
-              <div className='text-2xl'><span className='text-green-500'>Description:</span> {product.description}</div>
-              <div className='text-2xl flex gap-2'>
-              <span className='text-green-500'> Rating:</span>  <p className='text-yellow-500 text-3xl'><FaRegStar /></p>{product.rating}
+            <div className='p-4 md:p-6 lg:p-8'>
+              <h2 className='font-bold text-green-500 text-3xl md:text-4xl'>{product.title}</h2>
+              <div className='text-xl md:text-2xl mt-2'>
+                <span className='text-green-500 font-semibold'>Description:</span> {product.description}
               </div>
-              <p className='text-2xl'> <span className='text-green-500'> Price:</span>  ₹{product.price}</p>
-              <AddToCartButton item={product} handleAddToCart={() => addProductToCart(product)} />
+              <div className='text-xl md:text-2xl mt-2 flex items-center gap-2'>
+                <span className='text-green-500 font-semibold'>Rating:</span>
+                <p className='text-yellow-500 text-2xl md:text-3xl'><FaRegStar /></p>
+                {product.rating}
+              </div>
+              <p className='text-xl md:text-2xl mt-2'>
+                <span className='text-green-500 font-semibold'>Price:</span> ₹{product.price}
+              </p>
+              <div className='mt-4'>
+                <AddToCartButton item={product} handleAddToCart={() => addProductToCart(product)} />
+              </div>
             </div>
           </div>
         </div>

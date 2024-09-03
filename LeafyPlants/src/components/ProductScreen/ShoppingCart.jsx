@@ -1,7 +1,6 @@
 import React from 'react';
 import { useCartStore } from '../../store/CartStore'; // Adjust the path if necessary
 
-
 const ShoppingCart = ({ onCheckout }) => {
   const { cart, removeProductFromCart, updateProductQuantity, clearCart } = useCartStore((state) => ({
     cart: state.cart,
@@ -17,14 +16,15 @@ const ShoppingCart = ({ onCheckout }) => {
   const finalPrice = totalPrice - discount;
 
   return (
-    <main className='p-4  h-[960px] '>
+    <main className='p-4 min-h-screen bg-gray-50'>
       {cart.length === 0 ? (
-        <p className='flex mx-auto  my-[300px] justify-center  text-5xl text-green-500 items-center rounded-xl h-[200px]
-         w-[400px]'>Your cart is empty</p>
+        <p className='flex mx-auto my-32 justify-center text-3xl text-green-500 items-center rounded-xl h-40 w-full md:w-80'>
+          Your cart is empty
+        </p>
       ) : (
-        <div className='border-solid border-blue-300 border-2'>
-          <h2 className='text-2xl font-bold mb-4 p-4'>Shopping Cart</h2>
-          <div className='grid grid-cols-5 gap-4 p-4 border-b border-gray-300 bg-gray-100'>
+        <div className='border-2 border-blue-300 rounded-lg bg-white shadow-lg'>
+          <h2 className='text-2xl font-bold mb-4 p-4 border-b border-gray-300'>Shopping Cart</h2>
+          <div className='hidden md:grid grid-cols-5 gap-4 p-4 border-b border-gray-300 bg-gray-100'>
             <div className='font-semibold'>Image & Title</div>
             <div className='font-semibold text-center'>Quantity</div>
             <div className='font-semibold text-center'>Price</div>
@@ -32,25 +32,25 @@ const ShoppingCart = ({ onCheckout }) => {
             <div></div> {/* Empty column for alignment */}
           </div>
           {cart.map(product => (
-            <div className='grid grid-cols-5 gap-4 items-center p-4 border-b border-gray-300' key={product.id}>
-              <div className='flex items-center '>
-                <img className='my-3' src={product.image} alt={product.title} style={{ width: '100px' }} />
-                <div className='ml-4'>
+            <div className='grid grid-cols-1 md:grid-cols-5 gap-4 items-center p-4 border-b border-gray-300' key={product.id}>
+              <div className='flex items-center space-x-4'>
+                <img className='w-24 h-24 object-cover' src={product.image} alt={product.title} />
+                <div>
                   <h3 className='text-lg font-semibold'>{product.title}</h3>
                 </div>
               </div>
-              <div className='text-center '>
-                <div className='flex items-center w-20 h-8 justify-center bg-gray-500 rounded-xl text-white'>
+              <div className='text-center'>
+                <div className='flex items-center justify-center space-x-2'>
                   <button 
-                    className='bg-green-500 flex items-center justify-center p-2 w-8 h-8 text-2xl rounded-full'
+                    className='bg-green-500 text-white p-2 w-8 h-8 rounded-full'
                     onClick={() => updateProductQuantity(product.id, product.quantity - 1)}
                     disabled={product.quantity <= 1}
                   >
                     -
                   </button>
-                  <span className='mx-2'>{product.quantity}</span>
+                  <span className='text-lg'>{product.quantity}</span>
                   <button 
-                    className='bg-green-500 flex items-center justify-center p-2 w-8 h-8 text-2xl rounded-full'
+                    className='bg-green-500 text-white p-2 w-8 h-8 rounded-full'
                     onClick={() => updateProductQuantity(product.id, product.quantity + 1)}
                   >
                     +
@@ -85,7 +85,7 @@ const ShoppingCart = ({ onCheckout }) => {
                 New Buying Price: ₹{finalPrice.toFixed(2)}
               </h3>
             )}
-            <div className='mt-4'>
+            <div className='mt-4 flex flex-col sm:flex-row sm:space-x-4'>
               <button 
                 className='bg-blue-500 text-white py-2 px-6 rounded-lg text-lg font-semibold'
                 onClick={onCheckout}
@@ -93,7 +93,7 @@ const ShoppingCart = ({ onCheckout }) => {
                 Checkout
               </button>
               <button 
-                className='bg-red-500 text-white py-2 px-6 rounded-lg text-lg font-semibold ml-4'
+                className='bg-red-500 text-white py-2 px-6 rounded-lg text-lg font-semibold mt-4 sm:mt-0'
                 onClick={clearCart}
               >
                 Clear Cart
