@@ -103,7 +103,6 @@ const Routing = () => {
           <Route path="/AddToCartButton" element={<AddToCartButton />} />
           <Route path="/addtocartpage" element={<AddToCartPage />} />
           <Route path="/shoppingcart" element={<ShoppingCart />} />
-
           <Route path="/About" element={<About />} />
           <Route path="/mumbai" element={<Mumbai />} />
           <Route path="/pune" element={<Pune />} />

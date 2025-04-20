@@ -4,10 +4,10 @@ import validation from "../validation";
 
 const NewUser = () => {
   const [values, setValues] = useState({
-    Fname: "",
-    Lname: "",
-    email: "",
-    password: "",
+    FName: "",
+    LName: "",
+    Email: "",
+    Password: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -18,14 +18,14 @@ const NewUser = () => {
     setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
-  const checkEmailExists = async (email) => {
+  const checkEmailExists = async (Email) => {
     try {
       const response = await fetch("http://localhost:8080/check-email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ Email }),
       });
       const data = await response.json();
       return data.exists;
@@ -41,10 +41,10 @@ const NewUser = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      const emailExists = await checkEmailExists(values.email);
+      const emailExists = await checkEmailExists(values.Email);
       if (emailExists) {
         setEmailExists(true);
-        return;
+        return; // Stop the form submission if email already exists
       } else {
         setEmailExists(false);
       }
@@ -72,82 +72,82 @@ const NewUser = () => {
   };
 
   return (
-    <>
-      <div className="flex flex-col m-auto justify-center bg-[#fefefe] items-center border-2 w-96 h-3/5 my-14 text-xl rounded-xl font-sans">
-        <h1 className="my-4 text-4xl text-green-500 font-bold">Leafy</h1>
-        <p>Welcome back! Sign in with</p>
-        <div className="font-thin to-transparent">or use your email</div>
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="First name"
-            name="Fname"
-            onChange={handleInput}
-            className="w-80 h-12 py-3.5 my-2 px-4 rounded-md border-2 border-[#dadce0] text-base"
-            autoComplete="Fname-name"
-          />
-          {errors.Fname && (
-            <span key="Fname-error" className="text-red-500 text-sm">
-              {errors.Fname}
-            </span>
-          )}
-          <input
-            type="text"
-            placeholder="Last name"
-            name="Lname"
-            onChange={handleInput}
-            className="w-80 h-12 my-2 px-4 rounded-md border-2 border-[#dadce0] text-base"
-            autoComplete="Last-name"
-          />
-          {errors.Lname && (
-            <span key="lname-error" className="text-red-500 text-sm">
-              {errors.Lname}
-            </span>
-          )}
-          <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            onChange={handleInput}
-            className="w-80 h-12 my-2 px-4 rounded-md border-2 border-[#dadce0] text-base"
-            autoComplete="email"
-          />
-          {errors.email && (
-            <span key="email-error" className="text-red-500 text-sm">
-              {errors.email}
-            </span>
-          )}
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            onChange={handleInput}
-            className="w-80 h-12 my-2 px-4 rounded-md border-2 border-[#dadce0] text-base"
-            autoComplete="new-password"
-          />
-          {errors.password && (
-            <span key="password-error" className="text-red-500 text-sm">
-              {errors.password}
-            </span>
-          )}
-          {emailExists && (
-            <span className="text-red-500 text-sm mb-2">Email already exists. Please use a different email.</span>
-          )}
-          <button
-            type="submit"
-            className="uppercase bg-[#149253] rounded-md w-80 h-10 text-white my-4 cursor-pointer"
-          >
-            Create Account
-          </button>
-        </form>
-        <div className="flex my-4 items-center text-base">
-          <p>Already have an account?</p>
-          <Link to="/Account" className="text-[#129253]">
-            Sign in
-          </Link>
-        </div>
+    <div className="flex flex-col m-auto justify-center bg-[#fefefe] items-center border-2 w-96 h-3/5 my-14 text-xl rounded-xl font-sans">
+      <h1 className="my-4 text-4xl text-green-500 font-bold">Leafy</h1>
+      <p>Welcome back! Sign in with</p>
+      <div className="font-thin to-transparent">or use your email</div>
+      <form className="flex flex-col" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="First name"
+          name="FName"
+          onChange={handleInput}
+          className="w-80 h-12 py-3.5 my-2 px-4 rounded-md border-2 border-[#dadce0] text-base"
+          autoComplete="Fname-name"
+        />
+        {errors.FName && (
+          <span key="Fname-error" className="text-red-500 text-sm">
+            {errors.FName}
+          </span>
+        )}
+        <input
+          type="text"
+          placeholder="Last name"
+          name="LName"
+          onChange={handleInput}
+          className="w-80 h-12 my-2 px-4 rounded-md border-2 border-[#dadce0] text-base"
+          autoComplete="Last-name"
+        />
+        {errors.LName && (
+          <span key="lname-error" className="text-red-500 text-sm">
+            {errors.LName}
+          </span>
+        )}
+        <input
+          type="email"
+          placeholder="Email"
+          name="Email"
+          onChange={handleInput}
+          className="w-80 h-12 my-2 px-4 rounded-md border-2 border-[#dadce0] text-base"
+          autoComplete="Email"
+        />
+        {errors.Email && (
+          <span key="email-error" className="text-red-500 text-sm">
+            {errors.Email}
+          </span>
+        )}
+        <input
+          type="password"
+          placeholder="Password"
+          name="Password"
+          onChange={handleInput}
+          className="w-80 h-12 my-2 px-4 rounded-md border-2 border-[#dadce0] text-base"
+          autoComplete="new-password"
+        />
+        {errors.Password && (
+          <span key="password-error" className="text-red-500 text-sm">
+            {errors.Password}
+          </span>
+        )}
+        {emailExists && (
+          <span className="text-red-500 text-sm mb-2">
+            Email already exists. Please use a different email.
+          </span>
+        )}
+        <button
+          type="submit"
+          className="uppercase bg-[#149253] rounded-md w-80 h-10 text-white my-4 cursor-pointer"
+        >
+          Create Account
+        </button>
+      </form>
+      <div className="flex my-4 items-center text-base">
+        <p>Already have an account?</p>
+        <Link to="/Account" className="text-[#129253]">
+          Sign in
+        </Link>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import { useCartStore } from '../../store/CartStore'; // Adjust the path if necessary
+import { Link } from 'react-router-dom';
+// import { createPortal } from 'react-dom'
 
 const ShoppingCart = ({ onCheckout }) => {
   const { cart, removeProductFromCart, updateProductQuantity, clearCart } = useCartStore((state) => ({
@@ -16,7 +18,7 @@ const ShoppingCart = ({ onCheckout }) => {
   const finalPrice = totalPrice - discount;
 
   return (
-    <main className='p-4 min-h-screen bg-gray-50'>
+    <main className='p-4 min-h-screen bg-gray-50 mt-12 sm:mt-14 md:mt-14 lg:mt-12'>
       {cart.length === 0 ? (
         <p className='flex mx-auto my-32 justify-center text-3xl text-green-500 items-center rounded-xl h-40 w-full md:w-80'>
           Your cart is empty
@@ -86,12 +88,15 @@ const ShoppingCart = ({ onCheckout }) => {
               </h3>
             )}
             <div className='mt-4 flex flex-col sm:flex-row sm:space-x-4'>
+    <Link to={'/checkout'} >
+ 
               <button 
                 className='bg-blue-500 text-white py-2 px-6 rounded-lg text-lg font-semibold'
                 onClick={onCheckout}
               >
                 Checkout
               </button>
+              </Link>
               <button 
                 className='bg-red-500 text-white py-2 px-6 rounded-lg text-lg font-semibold mt-4 sm:mt-0'
                 onClick={clearCart}

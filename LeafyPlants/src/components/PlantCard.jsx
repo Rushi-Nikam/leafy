@@ -16,10 +16,10 @@ const PlantCard = ({ item }) => {
               <div className='font-semibold text-lg mb-2 text-center'>
                 {val.title}
               </div>
-              <div className='flex items-center mb-2'>
+              {/* <div className='flex items-center mb-2'>
                 <FaRegStar className='text-yellow-500' />
                 <span className='ml-1'>{val.rating}</span>
-              </div>
+              </div> */}
               <div className='text-[#149253] text-lg font-semibold mb-2'>
                 ₹ {val.price}
               </div>

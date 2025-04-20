@@ -1,16 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
 import bank from "../../public/mainimg/data.jpg";
-import main from "../../public/mainimg/maintag.png";
+// import main from "../../public/mainimg/maintag.png";
 import man from '../../public/mainimg/man.jpg';
 
 const About = () => {
   return (
     <>
       {/* Header Image */}
-      <div className="flex justify-center w-full">
-        <img src={main} alt="Main Tag"  />
+      <div className="flex mt-14  justify-center w-full">
+        <img className="w-full h-[500px]" src='/Story.jpg' alt="Main Tag"  />
       </div>
 
       {/* Content Section 1 */}

@@ -27,7 +27,7 @@ function Footer() {
         </div>
       </div>
 
-      <div className="grid px-4 py-4 md:px-12 md:py-6 w-full shadow-inner text-[#114c36] bg-white">
+      {/* <div className="grid px-4 py-4 md:px-12 md:py-6 w-full shadow-inner text-[#114c36] bg-white">
         <ul className="flex flex-wrap justify-center gap-4 text-sm md:text-base">
           <li>
             <Link to="/mumbai" className="px-2 underline hover:text-[#114c36]">
@@ -50,7 +50,7 @@ function Footer() {
             </Link>
           </li>
         </ul>
-      </div>
+      </div> */}
 
       <div className="grid px-4 py-6 md:px-12 md:py-8 text-[#114c36]">
         <ul className="flex flex-wrap gap-6 justify-center text-sm md:text-base md:justify-between">
@@ -61,22 +61,22 @@ function Footer() {
 
           <li className="flex flex-col gap-2 ">
             <h4 className="font-semibold">GET IN TOUCH</h4>
-            <Link to="/admindashboard" className="hover:text-[#114c36]">Call: +918398293232</Link>
+            <Link to="/admindashboard" className="hover:text-[#114c36]">Call: +919867581588</Link>
           </li>
 
           <li className="flex flex-col items-center">
             <h2 className="text-lg md:text-xl font-semibold mb-2">Follow US</h2>
             <div className="flex flex-wrap justify-center gap-2">
-              <Link to="/" className="w-10 h-10 flex items-center justify-center text-xl hover:bg-black hover:text-white rounded-full transition-colors">
+              <Link to="https://www.facebook.com/" className="w-10 h-10 flex items-center justify-center text-xl hover:bg-black hover:text-white rounded-full transition-colors">
                 <ImFacebook2 />
               </Link>
-              <Link to="/" className="w-10 h-10 flex items-center justify-center text-xl hover:bg-black hover:text-white rounded-full transition-colors">
+              <Link to="https://web.telegram.org/k/" className="w-10 h-10 flex items-center justify-center text-xl hover:bg-black hover:text-white rounded-full transition-colors">
                 <PiTelegramLogo />
               </Link>
-              <Link to="/" className="w-10 h-10 flex items-center justify-center text-xl hover:bg-black hover:text-white rounded-full transition-colors">
+              <Link to="https://www.instagram.com/" className="w-10 h-10 flex items-center justify-center text-xl hover:bg-black hover:text-white rounded-full transition-colors">
                 <FaInstagram />
               </Link>
-              <Link to="/" className="w-10 h-10 flex items-center justify-center text-xl hover:bg-black hover:text-white rounded-full transition-colors">
+              <Link to="https://maps.app.goo.gl/D45LLJPxNRXZcHgZ8" className="w-10 h-10 flex items-center justify-center text-xl hover:bg-black hover:text-white rounded-full transition-colors">
                 <FiMapPin />
               </Link>
             </div>

@@ -58,11 +58,11 @@ const SingleProduct = () => {
               <div className='text-xl md:text-2xl mt-2'>
                 <span className='text-green-500 font-semibold'>Description:</span> {product.description}
               </div>
-              <div className='text-xl md:text-2xl mt-2 flex items-center gap-2'>
+              {/* <div className='text-xl md:text-2xl mt-2 flex items-center gap-2'>
                 <span className='text-green-500 font-semibold'>Rating:</span>
                 <p className='text-yellow-500 text-2xl md:text-3xl'><FaRegStar /></p>
                 {product.rating}
-              </div>
+              </div> */}
               <p className='text-xl md:text-2xl mt-2'>
                 <span className='text-green-500 font-semibold'>Price:</span> ₹{product.price}
               </p>

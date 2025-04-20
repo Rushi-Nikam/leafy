@@ -1,24 +1,24 @@
 function Validation(values){
     alert("")
     let errors={}
-    const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
-    const password_pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    const Email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+    const Password_pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
 
-if (values.email === undefined || values.email === "") {
-    errors.email = "Email should not be empty";
-} else if (!email_pattern.test(values.email)) {
-    errors.email = "Email format is incorrect";
+if (values.Email === undefined || values.Email === "") {
+    errors.Email = "Email should not be empty";
+} else if (!Email_pattern.test(values.Email)) {
+    errors.Email = "Email format is incorrect";
 } else {
-    errors.email = "";
+    errors.Email = "";
 }
 
-if (values.password === undefined || values.password === "") {
-    errors.password = "Password should not be empty";
-} else if (!password_pattern.test(values.password)) {
-    errors.password = "Password format is incorrect";
+if (values.Password === undefined || values.Password === "") {
+    errors.Password = "Password should not be empty";
+} else if (!Password_pattern.test(values.Password)) {
+    errors.Password = "Password format is incorrect";
 } else {
-    errors.password = "";
+    errors.Password = "";
 }
 return errors;
 }

@@ -73,7 +73,7 @@ import React from "react";
       },
       {
         id:"8",
-        title:"Snake Plant ",
+        title:"Snake Plant  ",
         category:"Indoor",
         description:"A dwarf variety of the famed snake plant family, the Sansevieria Golden Hahnii sports beautiful variegated leaves in grey-green with dark green bands and golden yellow margins. It is a low maintenance plant that is hard to kill even for the most novice of gardeners. Its compact size makes it an excellent choice for office desks and small spaces.",
         image:"../../public/images/Snake_plant.png",

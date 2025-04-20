@@ -15,7 +15,7 @@ const Seeds = () => {
 
   return (
     <>
-      <div>
+      <div className=" mt-10 sm:mt-12 md:mt-12 lg:mt-14 ">
         {/* <span className="py-14 px-12 text-lg text-green-700">
           <Link className="mx-2" to={"/"}>
             Home

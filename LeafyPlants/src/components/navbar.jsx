@@ -4,30 +4,62 @@ import { FaUserLarge } from "react-icons/fa6";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { TiThMenu } from "react-icons/ti";
 import { IoCloseSharp } from "react-icons/io5";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import SessionContext from "../context/Session";
 import { useCartStore } from "../store/CartStore";
 
-const Navbar = ({ isLoggedIn }) => {
+const Navbar = () => {
   const session = useContext(SessionContext);
+  const { sessionId, role } = useContext(SessionContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
+  const navigate = useNavigate(); // Hook for programmatic navigation
 
   const { cart } = useCartStore((state) => ({
     cart: state.cart,
   }));
 
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  // Navigate to User Page or Admin Dashboard based on sessionId and role
+  const handleLoginClick = () => {
+    if (sessionId >= 0) {
+      // If the user is logged in and role is admin, navigate to Admin Dashboard
+      if (role === 'admin') {
+        navigate('/admindashboard');
+      } else {
+        navigate('/UserPage');
+      }
+    } else {
+      // If the user is not logged in, navigate to the login page
+      navigate('/Account');
+    }
+  };
 
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   const links = [
     { id: 1, link: "/collections/plants", title: "Plants" },
-    { id: 2, link: "/collections/seeds", title: "Seeds" },
     { id: 3, link: "/collections/service", title: "Service" },
     { id: 4, link: "/collections/GTools", title: "Gardening Accessories" },
     { id: 5, link: "/collections/Contact", title: "Contact us" },
   ];
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const query = searchQuery.trim().toLowerCase();
+
+    if (query) {
+      if (query.includes("plant")) {
+        navigate(`/collections/plants`);
+      } else if (query.includes("gardening") || query.includes("Water tools") || query.includes("gardening tools") ||  query.includes("tools")) {
+        navigate(`/collections/GTools`);
+      } else {
+        alert("No matching results found.");
+      }
+    }
+  };
+
   return (
-    <div className="flex items-center justify-between px-4 md:px-12 py-5 font-semibold bg-[#fff6f4] min-h-[3.5rem] max-h-[5rem]">
+    <div className="fixed top-0 left-0 w-full flex items-center justify-between px-4 md:px-12 py-5 font-semibold bg-[#fff6f4] min-h-[2rem] max-h-[3.5rem] shadow-md z-50">
+
       {/* Menu icon for mobile view */}
       <div className="md:hidden flex items-center">
         <div onClick={() => setMenuOpen(!menuOpen)} className="cursor-pointer">
@@ -58,27 +90,29 @@ const Navbar = ({ isLoggedIn }) => {
 
       {/* Search box and icons */}
       <div className="flex items-center gap-3 md:gap-5">
-        <div id="search-box" className="flex flex-1 items-center px-4 bg-white rounded-full overflow-hidden min-w-[10rem] max-w-[20rem]">
-          <input
-            className="focus:outline-none text-xs md:text-sm font-normal w-full py-2 md:py-3 bg-transparent"
-            type="search"
-            placeholder="Search for plants, seeds and planters..."
-          />
-          <CiSearch size={20} className="cursor-pointer" />
+        <form onSubmit={handleSearch} className="flex items-center gap-3">
+          <div id="search-box" className="flex flex-1 items-center px-4 bg-white rounded-full overflow-hidden min-w-[10rem] max-w-[20rem]">
+            <input
+              className="focus:outline-none text-xs md:text-sm font-normal w-full py-2 md:py-3 bg-transparent"
+              type="search"
+              placeholder="Search for plants, seeds, gardening tools..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <CiSearch size={20} className="cursor-pointer" onClick={handleSearch} />
+          </div>
+        </form>
+
+        {/* User icon */}
+        <div className="flex items-center cursor-pointer" onClick={handleLoginClick}>
+          <FaUserLarge size={24} />
         </div>
-        {session?.sessionId >= 0 ? (
-          <NavLink to="/Userpage">
-            <FaUserLarge size={20} />
-          </NavLink>
-        ) : (
-          <NavLink to="/Account">
-            <FaUserLarge size={20} />
-          </NavLink>
-        )}
+
+        {/* Shopping cart icon */}
         <NavLink to="/Shoppingcart" className="relative">
           <HiOutlineShoppingCart size={23} />
           {totalItems > 0 && (
-            <span className="absolute top-2 right-2 inline-flex items-center justify-center p-[6px] w-6 h-6 bg-green-500 text-white text-xs font-bold leading-none rounded-full">
+            <span className="absolute top-[-12px] right-[-10px] inline-flex items-center justify-center p-[6px] w-6 h-6 bg-green-500 text-white text-xs font-bold leading-none rounded-full">
               {totalItems}
             </span>
           )}
@@ -87,7 +121,7 @@ const Navbar = ({ isLoggedIn }) => {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <ul className="absolute left-0 top-36 w-full bg-[#fff6f4] flex flex-col items-start gap-4 py-4 px-6 md:hidden z-10 min-h-[10rem] max-h-[20rem]">
+        <ul className="absolute left-0 top-12 w-full bg-[#fff6f4] flex flex-col items-start gap-4 py-4 px-6 md:hidden z-10 min-h-[10rem] max-h-[20rem]">
           {links?.map((link) => (
             <li key={link.id} className="list-none w-full border-b border-gray-300">
               <NavLink

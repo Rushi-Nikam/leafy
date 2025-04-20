@@ -6,12 +6,16 @@ import Cards from './cards';
 
 const Homepage = () => {
   return (
-    <>
+    <div className='mt-12 sm:mt-14 md:mt-14 lg:mt-14 '>
+      <div className='w-[1700px]'>
+
+      <img className='lg:w-full sm:w-[600px] md:w-[855px] lg:h-[800px]' src="/Data.jpg" alt="" />
+      </div>
         <Banner />
         <Services />
         <BannerTwo />
         <Cards />
-    </>
+    </div>
   )
 }
 

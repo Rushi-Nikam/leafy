@@ -12,6 +12,7 @@ const Plants = () => {
       .then((response) => response.json())
       .then((jsonData) => {
         setItems(jsonData);
+        console.log({jsonData})
         setOriginalItems(jsonData); // Store the original data for resetting filters
         setMenuItems([...new Set(jsonData.map((val) => val.category))]);
       })
@@ -24,10 +25,10 @@ const Plants = () => {
   };
 
   return (
-    <>
-      <div className="w-full overflow-hidden">
+    <div className="max-h-[100rem] h-[1700px] ">
+      <div className="w-full mt-10 sm:mt-12 md:mt-12 lg:mt-14 overflow-hidden">
         <img
-          src="https://www.ugaoo.com/cdn/shop/collections/Indoor-Plants-Category-Banner_1.png?v=1689318958&width=1500"
+          src="/plant_banner.png"
           alt="Plants"
           className="w-full h-auto object-cover"
         />
@@ -52,14 +53,14 @@ const Plants = () => {
           </div>
 
           <div
-            className="w-full overflow-y-auto"
-            style={{ maxHeight: "calc(100vh - 200px)" }}
+            className="w-full  overflow-y-auto"
+            style={{ maxHeight: "calc(150vh - 200px)" }}
           >
             <PlantCard item={items} />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

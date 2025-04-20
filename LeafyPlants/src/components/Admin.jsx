@@ -4,14 +4,14 @@ import adminValidation from './adminValidation';
 import AdminSessionContext from '../context/AdminSessionContext';
 
 const Admin = () => {
-  const { AdminSessionId, setAdminSessionId } = useContext(AdminSessionContext);
+  const { SessionId, setSessionId } = useContext(AdminSessionContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (AdminSessionId >= 0) {
+    if (SessionId >= 0) {
       navigate('/'); // Redirect to home page if already logged in
     }
-  }, [AdminSessionId, navigate]);
+  }, [SessionId, navigate]);
 
   const [values, setValues] = useState({
     adminEmail: '',
@@ -29,7 +29,7 @@ const Admin = () => {
     const validationErrors = adminValidation(values);
     setErrors(validationErrors);
 
-    if (!validationErrors.adminEmail && !validationErrors.password) {
+    if (!validationErrors.Email && !validationErrors.Password) {
       try {
         const response = await fetch('http://localhost:8080/admin', {
           method: 'POST',

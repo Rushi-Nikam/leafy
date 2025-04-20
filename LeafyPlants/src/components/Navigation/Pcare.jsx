@@ -12,7 +12,7 @@ const Pcare = () => {
       .then((response) => response.json())
       .then((jsonData) => {
         setItems(jsonData);
-        setOriginalItems(jsonData); // Store the original data for resetting filters
+        setOriginalItems(jsonData);
         setMenuItems([...new Set(jsonData.map((val) => val.category))]);
       })
       .catch((error) => console.error('Error fetching gardening tools data:', error));
@@ -24,10 +24,10 @@ const Pcare = () => {
   };
 
   return (
-    <>
-      <div className="relative">
+    <div className="max-h-[100rem] h-[1700px]">
+      <div className="relative  mt-12 sm:mt-14 md:mt-14 lg:mt-14 ">
         <img 
-          src="https://www.ugaoo.com/cdn/shop/collections/Sub_Category_Banners_Plant_Care__Soil___Pott_Med_Desk_91aa0d88-5d77-4d87-8c35-67aa779b4e23.jpg?v=1690444683&width=1500"
+          src="/gardening_tool.png"
           alt="Gardening Tools Banner"
           className="w-full h-auto object-cover"
         />
@@ -49,13 +49,13 @@ const Pcare = () => {
 
           <div 
             className="w-full overflow-y-auto"
-            style={{ maxHeight: "calc(100vh - 200px)" }}
+            style={{ maxHeight: "calc(150vh - 200px)" }}
           >
             <PlantCard item={items} />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

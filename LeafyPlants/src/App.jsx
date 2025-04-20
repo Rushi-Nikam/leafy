@@ -31,19 +31,24 @@
     import SessionState from "./context/SessionState";
     import SessionContext from "./context/Session";
     import AdminSessionContext from "./context/AdminSessionContext";
-    import AdminSessionState from "./context/AdminSessionState";
+    // import AdminSessionState from "./context/AdminSessionState";
     import NewAdmin from "./components/NewAdmin";
     import Userinfo from "./components/admindashdata/Userinfo";
     import Profile from "./components/User/Profile";
-    import data1 from "./components/Data/data"; // Import data1
-    import data2 from "./components/Data/data2"; // Import data2
+    // import data1 from "./components/Data/data"; // Import data1
+    // import data2 from "./components/Data/data2"; // Import data2
     import { useCartStore } from "./store/CartStore";
+import Checkout from "./components/ProductScreen/Checkout";
+import Orders from "./components/User/Orders";
+import UserServices from "./components/User/UserServices";
+import AdminServices from "./AdminServices";
+import AdminContact from "./components/AdminContact";
     function App() {
       const [hideNavbar, setHideNavbar] = useState(false);
       const [hideHeader, setHideHeader] = useState(false);
       const [hideFooter, setHideFooter] = useState(false);
       const [isLoggedIn, setIsLoggedIn] = useState(false);
-      const [adminisLoggedIn, setAdminIsLoggedIn] = useState(false);
+      // const [adminisLoggedIn, setAdminIsLoggedIn] = useState(false);
       const session = useContext(SessionContext);
       const AdminSession = useContext(AdminSessionContext);
     
@@ -94,11 +99,8 @@
 
       return (
         <SessionState>
-          <AdminSessionState>
-         
-
           <BrowserRouter>
-            {!hideHeader && <Header />}
+            {/* {!hideHeader && <Header />} */}
             {!hideNavbar && <Navbar />}
             <Routes>
               <Route path="/" element={<Homepage />} />
@@ -119,28 +121,32 @@
               <Route path="*" element={<Error />} />
               <Route path="/Working" element={<Working />} />
               <Route path="/Forms" element={<Forms />} />
-              <Route path="/Formes" element={<Formes />} />
+              <Route path="/Form" element={<Formes />} />
               <Route path="/Admin" element={<Admin />} />
               <Route path="/newadmin" element={<NewAdmin />} />
-              <Route path="/userinfo" element={<Userinfo />} />
+              <Route path="/AdminDashboard/Userinfo" element={<Userinfo />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/Userpage" element={<Userpage />} />
+              <Route path="/user_orders" element={<Orders />} />
+              <Route path="/AdminDashboard/Services" element={<AdminServices/>} />
+              <Route path="/AdminDashboard/Contact" element={<AdminContact/>} />
               <Route path="/SingleProduct/:id" element={<SingleProduct />} />
               {/* <Route path="/SingleProduct/:category/:id" element={<SingleProduct data={[...data1, ...data2]} handleAddToCart={handleAddToCart} />} /> */}
               <Route path="/shoppingcart" element={<ShoppingCart products={cart} onProductRemove={handleProductRemove} onQuantityChange={handleQuantityChange} />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="//userservice" element={<UserServices />} />
              
               <Route path="/About" element={<About />} />
               <Route path="/mumbai" element={<Mumbai />} />
               <Route path="/pune" element={<Pune />} />
               <Route path="/thane" element={<Thane />} />
               <Route path="/satara" element={<Satara />} />
-             {adminisLoggedIn ? <Route path="/admindashboard" element={<Admindashboard  />} /> :<Route path="/" element={<Homepage />} />  } 
+              {/* <Route path="/admindashboard" element={<Admindashboard  />} />  */}
             </Routes>
             {!hideFooter && <Footer />}
           </BrowserRouter>
          
 
-          </AdminSessionState>
         </SessionState>
       );
     }

@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 const Services = () => {
   const data = [
     {
-      image: "https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/What-Are-Plants.jpg",
+      image: "/Plant_image.jpg",
       title: "Bestsellers"
     },
     {
-      image: "https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/What-Are-Plants.jpg",
+      image: "https://www.ugaoo.com/cdn/shop/files/4._XL_Plants_35a5fe2d-ef9a-4505-98bd-11256c8987e3.png?v=1737519048&width=360",
       title: "Easy to Care"
     },
     {
@@ -15,16 +15,16 @@ const Services = () => {
       title: "XL Plants"
     },
     {
-      image: "https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/What-Are-Plants.jpg",
-      title: "Ceramic Pots"
+      image: "/pot.jpg",
+      title: "Different Pots"
     },
     {
-      image: "https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/What-Are-Plants.jpg",
-      title: "Vegetable Seeds"
+      image: "/air_puri.jpg",
+      title: "Air Purifiers"
     },
     {
-      image: "https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/What-Are-Plants.jpg",
-      title: "Fertilisers"
+      image: "/Wall.jpg",
+      title: "Gardening Services"
     },
   ];
 

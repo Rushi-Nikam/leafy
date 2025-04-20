@@ -7,7 +7,7 @@ const Card = ({ image_url, title }) => {
         <img
           src={image_url}
           alt={title}
-          className='w-full h-auto rounded-sm hover:scale-105 transition-all duration-300 ease-in-out'
+          className='w-full h-[500px] rounded-sm hover:scale-105 transition-all duration-300 ease-in-out'
         />
       </div>
       <h1 className='font-semibold text-base sm:text-lg md:text-xl'>{title}</h1>

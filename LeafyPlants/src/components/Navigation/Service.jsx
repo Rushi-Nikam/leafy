@@ -4,15 +4,16 @@ import { Link } from 'react-router-dom';
 const Service = () => {
   return (
     <>
-      <div>
+      <div className='mt-10 sm:mt-12 md:mt-12 lg:mt-14'>
         <img 
-          src="https://www.ugaoo.com/cdn/shop/files/final-web-banner.jpg?v=1674630750"
+          src="/services.png"
           alt="Service Banner"
-          className="w-full"
+          className="w-[1750px] h-[600px]"
+          
         />
       </div>
       
-      <div className="py-10 px-4 lg:px-24">
+      <div className="py-10 px-4 lg:px-24 ">
         {/* Garden Maintenance Section */}
         <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 lg:gap-16 mb-12">
           <div className="w-full lg:w-7/12">
@@ -47,7 +48,7 @@ const Service = () => {
               <li className="my-2">2. Maintenance / Existing as well as New</li>
             </ol>
             <div className="flex justify-center lg:justify-start">
-              <Link to="/Forms">
+              <Link to="/Form">
                 <button className="bg-green-800 flex items-center justify-center py-2 px-6 lg:px-10 text-white rounded-lg uppercase">
                   Fill Out Form
                 </button>
